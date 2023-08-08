@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cookie-signer</title>
+    <style>
+        * {
+            color: #cccce0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        body {
+            background-color: #222;
+            padding: 1rem;
+        }
+        h1,h3 {
+            color: #cccce0;
+            font-family: "Lucida Console", "Courier New", monospace;
+            letter-spacing: -0.1rem;
+            text-transform: uppercase;
+        }
+        input {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem;
+            border: 3px solid;
+            border-radius: 0.15rem;
+        }
+        quote {
+            color: #d6d6d6;
+            font-weight: lighter;
+            font-style: italic;
+        }
+        #user { width: 40rem; }
+        #cookie-display { overflow-wrap: anywhere; }
+        .container { padding: 2rem; }
+    </style>
+  </head>
+  <body>
+
+    <div class="container">
+      <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+          <h1>COOKIE-SIGNER</h1>
+      </header>
+      <hr />
+    </div>
+
+    <div class="container">
+      <h3>Set new cookies</h3>
+      <form class="login-form" action="/auth" method="post">
+          <label for="user">User JSON:</label><br />
+          <input id="user" type="text" name="user" value="">
+          <input type="submit" value="Submit">
+      </form>
+    </div>
+
+    <div class="container">
+      <h3>Current cookies</h3>
+      <div id="cookie-display"> There are no cookies. </div>
+      <br />
+      <div id="decoded-cookie"></div>
+    </div>
+
+    <div class="container">
+      <footer class="py-3 my-4">
+        <hr />
+        <p class="text-center text-body-secondary">🤝🤝🤝🤝<br/>@4wayhandshake</p>
+      </footer>
+    </div>
+
+
+  </body>
+
+  <script>
+    document.getElementById('cookie-display').innerHTML=listCookies()
+    document.getElementById('decoded-cookie').innerHTML=decodeCookie()
+    function listCookies() {
+        return document.cookie.replace('; ',';');
+    }
+    function decodeCookie() {
+        var cookies = document.cookie.split(";");
+        const obj = atob(cookieVal(cookies[0]));
+        return JSON.stringify(JSON.parse(obj),null,'  ');
+    }
+    function cookieVal(s) {
+        const i = s.indexOf('=');
+        return (i > 0) ? s.slice(i+1) : '';
+    }
+  </script>
+
+</html>
