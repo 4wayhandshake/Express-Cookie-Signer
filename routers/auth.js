@@ -11,23 +11,24 @@ const hashPassword = (password) => {
     return node_crypto_1.default.createHash("md5").update(password).digest("hex");
 };
 
-router.post("/", async (req, res) => {
+function writeCookies(req,res,next) {
     try {
         const user = eval( '(' + req.body.user + ')' );
-        req.session.flashes = {
-            "info":[],
-            "error":[],
-            "success":["You are now logged in."]
-        };
-        req.session.user = {
-            id: user.id,
-            username: user.username,
-        };
+        req.session = user;
     } catch (error) {
-        req.session.user = {id: -1, username:"Error: Invalid input"};
+        req.session = {result:"Error: Invalid input"};
         console.log(error);
     }
-    return res.redirect("/");
+    next();
+}
+
+router.post("/api", writeCookies, (req, res) => {
+    res.send("Contacted API.");
 });
+
+router.post("/", writeCookies, (req, res) => {
+    res.redirect("/");
+});
+
 
 exports.default = router;

@@ -26,12 +26,18 @@
             border: 3px solid;
             border-radius: 0.15rem;
         }
+        input:hover{ filter: brightness(150%); }
         quote {
             color: #d6d6d6;
             font-weight: lighter;
             font-style: italic;
         }
-        #user { width: 40rem; }
+        .input-row { display: flex; }
+        #user {
+            width: 40rem;
+            margin-right: 0.5rem;
+            flex: 1;
+         }
         #cookie-display { overflow-wrap: anywhere; }
         .container { padding: 2rem; }
     </style>
@@ -49,8 +55,10 @@
       <h3>Set new cookies</h3>
       <form class="login-form" action="/auth" method="post">
           <label for="user">User JSON:</label><br />
-          <input id="user" type="text" name="user" value="">
-          <input type="submit" value="Submit">
+          <div class="input-row">
+            <input id="user" type="text" name="user" value="">
+            <input type="submit" value="Submit">
+          </div>
       </form>
     </div>
 
