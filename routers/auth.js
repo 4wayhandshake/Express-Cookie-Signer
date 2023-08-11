@@ -4,16 +4,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const node_crypto_1 = __importDefault(require("node:crypto"));
 const router = express_1.default.Router();
-
-const hashPassword = (password) => {
-    return node_crypto_1.default.createHash("md5").update(password).digest("hex");
-};
 
 function writeCookies(req,res,next) {
     try {
-        const user = eval( '(' + req.body.user + ')' );
+        let user;
+        if (req.body && req.body.user) {
+            user = eval( '(' + req.body.user + ')' );
+        } else if (req.query && req.query.user){
+            user = eval( '(' + req.query.user + ')' );
+        }
         req.session = user;
     } catch (error) {
         req.session = {result:"Error: Invalid input"};
@@ -22,7 +22,7 @@ function writeCookies(req,res,next) {
     next();
 }
 
-router.post("/api", writeCookies, (req, res) => {
+router.get("/api", writeCookies, (req, res) => {
     res.send("Contacted API.");
 });
 
